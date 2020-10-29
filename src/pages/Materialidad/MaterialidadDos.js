@@ -9,7 +9,6 @@ import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import Paper from '@material-ui/core/Paper';
-import Dash from './AppBar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -25,7 +24,7 @@ const DashBoard = (props) => {
     const [nodes, setNodes] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
     const [buttonLoad, setButtonLoad] = React.useState(false);
-    const [token, setToken] = React.useState('u0ju5n4n2c-E1CcQEKuTzf6+aii1YSHamYPCfwjmXvAYUwEH+9MJLY=');
+    const [token, setToken] = React.useState('u0sw1lomip-BQ1uBm101KMJy9tCx7rPbd5XvRUU+kOCihnUvmggeCg=');
     const [proxyurl, setProxy] = React.useState('https://cors-anywhere.herokuapp.com/');
     const [environment, setEnvironment] = React.useState('https://console.kaleido.io/gql');
     const useStyles = makeStyles((theme) => ({
@@ -47,9 +46,8 @@ const DashBoard = (props) => {
         const d = new Date();
         return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('-');
     }
-
-    const kaleidoStatus = () => {        
-        const url = 'https://console-us1.kaleido.io/api/v1/consortia/u1gtjb0tkf/environments/u1rzorprre/nodes';
+    const kaleidoStatus = () => { 
+        const url = 'https://console-us1.kaleido.io/api/v1/consortia/u1ykxduhrb/environments/u1gjnte8vm/status';
         let config = { "headers" : {
                         "Authorization" : 'Bearer ' + token, 
                         "content-type" : "application/json",
@@ -71,7 +69,7 @@ const DashBoard = (props) => {
         setButtonLoad(true);
         let body ={
             "operationName": "updateEnvironment",
-            "variables": {"environment": {"state": "live"}, "consortia_id": "u1gtjb0tkf", "id": "u1rzorprre"},
+            "variables": {"environment": {"state": "live"}, "consortia_id": "u1ykxduhrb", "id": "u1gjnte8vm"},
             "query": "fragment EnvironmentFields on Environment {\n  _id\n  name\n  description\n  state\n  mode\n  provider\n  release_id\n  consensus_type\n  consortia_id\n  chain_id\n  block_period\n  region\n  enable_tether\n  limit_initial_signers\n  node_list\n  service_list\n  autopause_init_delay\n  autopause_idle_hours\n  created_at\n  deleted_at\n  paused_at\n  resumed_at\n  member_policy\n  amend_policy\n  locked_policies\n  test_features\n  updated_at\n  __typename\n}\n\nmutation updateEnvironment($consortia_id: String!, $id: String!, $environment: UpdateEnvironmentInput!) {\n  updateEnvironment(consortia_id: $consortia_id, id: $id, environment: $environment) {\n    ...EnvironmentFields\n    __typename\n  }\n}\n"
         }   
         let config = { "headers" : {
@@ -96,7 +94,7 @@ const DashBoard = (props) => {
         setLoading(false); 
         let body ={
             "operationName": "updateEnvironment",
-            "variables": {"environment": {"state": "live"}, "consortia_id": "u1gtjb0tkf", "id": "u1rzorprre"},
+            "variables": {"environment": {"state": "paused"}, "consortia_id": "u1ykxduhrb", "id": "u1gjnte8vm"},
             "query": "fragment EnvironmentFields on Environment {\n  _id\n  name\n  description\n  state\n  mode\n  provider\n  release_id\n  consensus_type\n  consortia_id\n  chain_id\n  block_period\n  region\n  enable_tether\n  limit_initial_signers\n  node_list\n  service_list\n  autopause_init_delay\n  autopause_idle_hours\n  created_at\n  deleted_at\n  paused_at\n  resumed_at\n  member_policy\n  amend_policy\n  locked_policies\n  test_features\n  updated_at\n  __typename\n}\n\nmutation updateEnvironment($consortia_id: String!, $id: String!, $environment: UpdateEnvironmentInput!) {\n  updateEnvironment(consortia_id: $consortia_id, id: $id, environment: $environment) {\n    ...EnvironmentFields\n    __typename\n  }\n}\n"
         }    
         let config = { "headers" : {
@@ -121,7 +119,7 @@ const DashBoard = (props) => {
         let min = new Date().getMinutes();
         let seg = new Date().getSeconds() 
 
-        console.log('stop day: ' + day + '  Hours : ' + hours + '</br>' + min + seg);
+        console.log('mat2-kasia-stop day: ' + day + '  Hours : ' + hours + '</br>' + min + seg);
         if (hours === 20 && min === 57) 
         {
            console.log("pruewbas scheduled kaliedo Off")
@@ -135,7 +133,7 @@ const DashBoard = (props) => {
         let min = new Date().getMinutes();
         let seg = new Date().getSeconds() 
 
-        console.log('start day: ' + day + '  Hours : ' + hours + '</br>' + min + seg);
+        console.log('mat2-start day: ' + day + '  Hours : ' + hours + '</br>' + min + seg);
         //8 am a 7 pm
         if (hours === 8 && min === 3) 
         {
@@ -200,8 +198,9 @@ const DashBoard = (props) => {
     
     // scheduled interbval 1mn check start or stop node
     //60000 1 mn descomentar
-     setInterval(scheduledNodeStart, 180000 );
-     setInterval(scheduledNodeStop, 180000 );
+
+    setInterval(scheduledNodeStart, 180000 );
+    setInterval(scheduledNodeStop, 180000 );
 
     
     React.useEffect(() => {
@@ -212,9 +211,9 @@ const DashBoard = (props) => {
     <div >
         {!buttonLoad ?  '' :  <LinearProgress />}
         {!loading ? <LinearProgress color="secondary"  /> :       
-    <Container component="div" style={{ paddingTop:'50px', backgroundColor: 'whiteSmoke', height: 'auto'}}>          
+    <Container  maxWidth='xl' style={{ paddingTop:'50px', backgroundColor: 'whiteSmoke', height: 'auto'}}>          
     <Grid  style={{paddingTop:'40px'}} container  justify="center" className={classes.root} spacing={3}>   
-            <Paper>    
+        <Paper>      
                     <div style={{padding: '25px 0px 25px 40px'}}>
                                     <Grid item xl={12} lg={10} md={11} sm={12} xs={12}>
                                         <Grid container spacing={3}>
@@ -222,15 +221,15 @@ const DashBoard = (props) => {
                                             <Grid item>Api nodo 2: <b>{node2}</b></Grid>
                                             <Grid item>Api nodo 3: <b>{node3}</b></Grid>*/}
                                               <Tooltip title="Cambiar estatus Environment ">
-                                                        {nodes[0].state==='paused' ?
-                                                    <Button  onClick={() => start()}> Gestión Corporativa / Environment dev :  start
+                                                        {nodes.state==='paused' ?
+                                                    <Button  onClick={() => start()}> Materialidad Dos / Environment  :  start
                                                         <LoopIcon/>
                                                     </Button> :  
-                                                    <Button  onClick={() => stop()}>  Gestión Corporativa / Environment dev :  stop
+                                                    <Button  onClick={() => stop()}>  Materialidad Dos / Environment  :  stop
                                                         <LoopIcon/>
                                                     </Button>
                                             }</Tooltip>
-                                            <Grid item>Environment Status: <b>{nodes[0].state}</b></Grid>
+                                            <Grid item>Environment Status: <b>{nodes.state}</b></Grid>
                                             <Grid item>Fecha:<b>{fecha()}</b></Grid>
                                             <Grid item>Iniciando nodos a las <b>8:03 am</b></Grid> 
                                             <Grid item>Apagando nodos a las <b>20:57 pm</b></Grid> 
@@ -251,12 +250,10 @@ const DashBoard = (props) => {
                         </ListItemAvatar>
                         <ListItemText primary="System" secondary={
                         <dl>
-                            <dt> Status : { nodes[0].state} </dt>
-                            <dt> Environment Id : { nodes[0].environment_id } </dt>
+                         <dt> Status : { nodes.state} </dt>
+                         <dt> Environment Id : { nodes.node_list[0] } </dt>
                         </dl> }/>
-                        <Button>
-                            <PauseCircleOutlineIcon/>
-                        </Button>
+                       
                     </ListItem>
                 </List>
                 </Paper>
@@ -272,12 +269,10 @@ const DashBoard = (props) => {
                         </ListItemAvatar>
                         <ListItemText primary=" Start" secondary={
                         <dl>
-                            <dt> Status : { nodes[1].state} </dt>
-                            <dt> Environment Id : { nodes[1].environment_id } </dt>
+                            <dt> Status : { nodes.state} </dt>
+                            <dt> Environment Id : { nodes.node_list[1] } </dt>
                         </dl> }/>
-                        <Button>
-                            <PauseCircleOutlineIcon/>
-                        </Button>
+                       
                     </ListItem>
                 </List>
                 </Paper>
